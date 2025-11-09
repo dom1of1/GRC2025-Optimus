@@ -1,148 +1,255 @@
-# GHANA ROBOTICS COMPETITION 2025 ROBOT CONTROLLER
+# ORION V2 — Ghana Robotics Competition 2025 (Smart City Builders Challenge)
 
-A MicroPython-based robot controller for a 4-wheel drive robot with servo attachments for the 2025 edition of the Ghana Robotics Competition. The robot supports both autonomous navigation and Bluetooth-controlled manual operation.
+**MicroPython-powered robot designed for the Ghana Robotics Competition (Engineers League, Smart City Builders Challenge).**
+Built using the **Xplore Bot kit** and a **Raspberry Pi Pico**, ORION V2 combines autonomous bridge repair, Bluetooth manual operation, and 3D-printed attachments to complete city-building and cleanup tasks.
 
-## Features
+---
 
-- **Dual Operation Modes**
-  - Autonomous mode with pre-programmed navigation routines
-  - Manual control via UART/Bluetooth communication
-  
-- **4-Motor Drive System**
-  - Independent control of 4 DC motors with PWM speed control
-  - Directional movement: forward, backward, left, right, and stop
-  
-- **Servo Control**
-  - Dual servo motors for additional mechanical functions
-  - Up/down positioning and alternating movement patterns
-  
-- **Manual Override**
-  - Seamlessly switch from autonomous to manual mode during operation
-  - Real-time command processing via UART
+## 📚 Table of Contents
 
-## Hardware Requirements
+* [Overview](#-overview)
 
-- Raspberry Pi Pico (or compatible MicroPython board)
-- 4x DC motors with H-bridge motor drivers
-- 4x PWM motor controllers
-- 2x Servo motors
-- Bluetooth/UART module
-- Start button (connected to GPIO 2)
-- Appropriate power supply
+  * [Challenge Context](#challenge-context)
+* [Repository Structure](#-repository-structure)
+* [Robot Summary](#-robot-summary)
+* [Hardware Overview](#%EF%B8%8F-hardware-overview)
+* [Software Architecture](#-software-architecture)
+* [Quick Start (Flash & Run)](#-quick-start-flash--run)
 
-## Pin Configuration
+  * [Bluetooth Commands](#bluetooth-commands)
+* [Behavior Summary](#-behavior-summary)
 
-### Motors
-- **Motor 1:** ENA (GPIO 10), Forward (GPIO 11), Backward (GPIO 12)
-- **Motor 2:** ENB (GPIO 13), Forward (GPIO 14), Backward (GPIO 15)
-- **Motor 3:** ENC (GPIO 20), Forward (GPIO 17), Backward (GPIO 16)
-- **Motor 4:** END (GPIO 21), Forward (GPIO 19), Backward (GPIO 18)
+  * [Autonomous Mode](#1%EF%B8%8F-autonomous-mode-mandatory-1-minute)
+  * [Manual Mode](#2%EF%B8%8F-manual-mode)
+* [Mechanical Design](#-mechanical-design)
+* [Calibration](#-calibration)
+* [Rebuilding ORION V2](#-rebuilding-orion-v2)
+* [Documentation & Media](#-documentation--media)
+* [Credits](#-credits)
 
-### Servos
-- **Servo 1:** GPIO 28 (lifting mechanism)
-- **Servo 2:** GPIO 18 (shared with Motor 4 backward pin)
-- **Servo 3:** GPIO 19 (shared with Motor 4 forward pin)
+---
 
-**Note:** Servos 2 and 3 share pins with Motor 4. The `utils.py` module automatically manages these conflicts by disabling servo PWM when motors are in use and reinitializing motor pins after servo operations.
+## 🧠 Overview
 
-### Other
-- **Start Button:** GPIO 2 (with pull-up)
-- **UART:** UART0, 9600 baud
+### Challenge Context
 
-## Core Functions (from utils.py)
+The **Smart City Builders Challenge** tasks participants to design robots addressing three real-world problems in sustainable cities:
 
-### Motor Control
-- `set_speed(speed)` - Set PWM duty cycle for all motors (0-65535)
-- `forward()` - Move robot forward
-- `backward()` - Move robot backward
-- `left()` - Turn robot left
-- `right()` - Turn robot right
-- `stop()` - Stop all motors
+1. **Fixing a Broken Bridge** – repairing road infrastructure before autonomous cars arrive.
+2. **Building Essential Services** – constructing schools, hospitals, and workplaces using color-coded blocks.
+3. **Cleaning the City** – collecting rubbish balls and disposing them in bins.
 
-### Servo Control
-- `servo_up()` - Raise servos 2 & 3 to up position
-- `servo_down()` - Lower servos 2 & 3 to down position
-- `servo_open()` - Open servo 1 (lifting mechanism)
-- `servo_close()` - Close servo 1 (lifting mechanism)
-- `enable_servos()` - Initialize servo PWM on shared pins
-- `disable_servos()` - Disable servo PWM to allow motor operation
+Each match lasts **3 minutes**, beginning with a **1-minute autonomous mode** (worth double points), followed by a **manual mode** (Bluetooth-controlled). Teams must score as many points as possible without external assistance.
 
-### Autonomous Functions
-- `red_autonomous_behavior()` - Execute pre-programmed autonomous routine
-- `check_manual_override()` - Check for incoming UART commands
-- `timed_sleep_with_override(duration)` - Sleep with ability to detect manual override
+---
 
-## Project Structure
+## 📁 Repository Structure
 
 ```
-GRC_25/
-├── main.py       - Main robot controller and operation loop
-├── utils.py      - Hardware utilities and motor/servo control functions
-├── README.md     - This file
-└── requirements.txt
+├── README.md
+├── LICENSE
+├── docs/
+│   ├── Engineering_Notebook.pdf
+│   └── Game_Rules.pdf
+├── src/
+│   ├── main.py
+│   ├── autonomous.py
+│   └── utils.py
+├── schemes/
+│   └── wiring_diagram.png
+├── models/
+│   └── attachments/
+├── photos/
+│   ├── build/
+│   └── final/
+└── video/
+    └── demo.mp4
 ```
 
-### File Descriptions
+---
 
-- **main.py**: Main program that handles the operation loop, mode switching between autonomous and manual control, and processes Bluetooth commands
-- **utils.py**: Contains all hardware initialization, motor control functions, servo operations, and autonomous behavior routines
+## 🦾 Robot Summary
 
-## Installation
+| Component             | Description                                      |
+| --------------------- | ------------------------------------------------ |
+| **Name**              | ORION V2                                         |
+| **Controller**        | Raspberry Pi Pico (MicroPython)                  |
+| **Drive System**      | 4-wheel tank drive (DC motors via L298N drivers) |
+| **Power Supply**      | 7.4V Li-ion battery pack                         |
+| **Communication**     | HC-05 Bluetooth module (UART0, 9600 baud)        |
+| **Autonomous Inputs** | 2 start buttons (Red = GPIO 2, Blue = GPIO 6)    |
+| **Outputs**           | 4 DC motors, 3 servos                            |
+| **Attachments**       | Rear bridge pusher + front dual-servo gripper    |
 
-1. Install MicroPython firmware on your Raspberry Pi Pico
-2. Upload **all project files** to your Pico's root directory:
-   - `main.py` - Main robot controller
-   - `utils.py` - Hardware utilities and control functions
-   
-   **Important:** Both files must be uploaded to the Pico for the robot to function properly. The `main.py` file imports functions from `utils.py`.
+---
 
-3. Connect your hardware according to the pin configuration below
-4. The robot will automatically run `main.py` on power-up (if configured as boot.py or main.py)
+## ⚙️ Hardware Overview
 
-## Usage
+### Core Components
 
-### Autonomous Mode
+| Component         | Purpose                | Notes                                          |
+| ----------------- | ---------------------- | ---------------------------------------------- |
+| Raspberry Pi Pico | Main brain             | Runs MicroPython code (v1.22+)                 |
+| 4x DC Motors      | Movement               | Controlled by L298N drivers (PWM)              |
+| 2x L298N Modules  | Motor control          | Each drives 2 motors                           |
+| 3x Servos         | Gripper lift and claws | Temporarily disables one motor pin when in use |
+| HC-05 Bluetooth   | Manual control         | UART0 pins (GP0 = TX, GP1 = RX)                |
+| 2x Start Buttons  | Side selection         | Red = GPIO 2, Blue = GPIO 6                    |
+| Power Source      | 7.4V battery           | Common ground with Pico                        |
 
-The robot starts in autonomous mode by default. Press the start button to begin:
+📄 *See* [`schemes/wiring_diagram.png`](schemes/wiring_diagram.png) *for detailed pin mapping.*
 
-1. Press the physical start button (GPIO 2)
-2. Wait 3 seconds for initialization
-3. Robot executes pre-programmed autonomous behavior
+---
 
-The autonomous routine includes:
-- Forward navigation
-- Right turns
-- Speed adjustments for precision
-- Automatic stop upon completion
+## 🧩 Software Architecture
 
-### Manual Control
+```bash
+src/
+├── main.py      # Main program (autonomous + manual control)
+└── utils.py     # Movement, servo, and behavior utilities
+```
 
-Send commands via Bluetooth/UART connection:
+* **`main.py`** handles startup, side selection, and switching between autonomous and manual modes.
+* **`utils.py`** contains helper functions for movement, servo control, and timing calibration.
 
-| Command | Action |
-|---------|--------|
-| `F` | Move forward |
-| `B` | Move backward |
-| `L` | Turn left |
-| `R` | Turn right |
-| `S` | Stop |
-| `1` | Servo down position |
-| `2` | Servo up position |
+---
 
-### Manual Override
+## 🔧 Quick Start (Flash & Run)
 
-During autonomous mode, send any command via UART to immediately switch to manual control mode.
+1. **Flash MicroPython** to the Raspberry Pi Pico (via Thonny or `esptool`).
+2. **Copy Files**: Upload `src/main.py` and `src/utils.py` to the Pico’s root directory.
+3. **Wire Components**: Follow [`schemes/wiring_diagram.png`](schemes/wiring_diagram.png) to connect motors, servos, Bluetooth, and buttons.
+4. **Power the Robot** and press:
 
-## Troubleshooting
+   * **Red button** → Run *Red-side autonomous routine*.
+   * **Blue button** → Run *Blue-side autonomous routine*.
+5. After the autonomous phase or when Bluetooth input is received, the robot automatically switches to **manual control mode**.
 
-- **Motors not responding:** Check PWM connections and power supply
-- **Servos not moving:** Ensure motors are stopped and servos are enabled
-- **Bluetooth commands not working:** Verify UART baud rate (9600) and connection
+### Bluetooth Commands
 
-## License
+| Command | Action        |
+| ------- | ------------- |
+| `F`     | Move forward  |
+| `B`     | Move backward |
+| `L`     | Turn left     |
+| `R`     | Turn right    |
+| `S`     | Stop          |
+| `1`     | Lower arms    |
+| `2`     | Raise arms    |
+| `3`     | Open gripper  |
+| `4`     | Close gripper |
 
-This project is provided as-is for educational and competition purposes.
+---
 
-## Contributing
+## 🤖 Behavior Summary
 
-Feel free to modify and adapt this code for your specific robot configuration and requirements.
+### 1️⃣ Autonomous Mode (Mandatory, 1 minute)
+
+* Starts upon pressing Red/Blue button.
+* Executes bridge repair task based on field side.
+* Each side routine uses pre-timed motion (via `calc_time(distance_cm)` calibration).
+* Bluetooth input cancels autonomous mode immediately.
+
+#### Autonomous Routines
+
+| Side     | Behavior Summary                                                                   |
+| -------- | ---------------------------------------------------------------------------------- |
+| **Red**  | Moves forward ≈ 88 cm, turns toward bridge, aligns, and pushes pallets into place. |
+| **Blue** | Mirror version with ≈ 70 cm forward motion.                                        |
+
+#### Scoring Reference (from Game Manual)
+
+| Task                               | Autonomous  | Manual | Notes                |
+| ---------------------------------- | ----------- | ------ | -------------------- |
+| Pallet placed correctly            | 40 pts      | 20 pts | Double in autonomous |
+| Fixed bridge before carbots arrive | +10 bonus   | —      | —                    |
+| Carbot deviation                   | −30 penalty | —      | —                    |
+
+---
+
+### 2️⃣ Manual Mode
+
+* Activates automatically after autonomous mode or via Bluetooth input.
+* Allows fine control for:
+
+  * Collecting and stacking building blocks (school, hospital, workplace)
+  * Cleaning the city (rubbish balls)
+
+#### Building Rules
+
+* Blocks must be stacked **Copper → Violet → Grey**.
+* Each correctly placed block: **+5 points**.
+* Wrong color order: **−10 penalty**.
+* Complete structure in correct zone: **+50 bonus**.
+
+#### Cleanup Rules
+
+| Task                         | Autonomous | Manual | Notes                |
+| ---------------------------- | ---------- | ------ | -------------------- |
+| Rubbish deposited            | 10 pts     | 5 pts  | Must fully enter bin |
+| Mishandled/dropped container | —          | −5 pts | —                    |
+
+---
+
+## 🪛 Mechanical Design
+
+| Module                | Description                                                   |
+| --------------------- | ------------------------------------------------------------- |
+| **Drive System**      | 4-wheel tank configuration for stability and turning control. |
+| **Front Gripper**     | Dual 3D-printed rectangular arms (servo-controlled).          |
+| **Gripper Functions** | Lift (servo 1), Open/Close (servos 2 & 3).                    |
+| **Rear Attachment**   | Fixed pusher plate for bridge repair.                         |
+
+📂 3D models available in [`models/`](models/) — includes `3d_printed_arms.stl` and bridge pusher design.
+
+---
+
+## 📏 Calibration
+
+Motion timing is based on travel distance (40.5 cm/s baseline). The following formula is used for consistent movement:
+
+```python
+# utils.py
+# Convert distance (cm) to time (s)
+time = 1.8 * (distance_cm / 40.5)
+```
+
+Adjust the multiplier based on battery level and motor friction.
+
+---
+
+## 🧰 Rebuilding ORION V2
+
+To replicate the full robot:
+
+1. Assemble the Xplore Bot chassis.
+2. Attach rear bridge pusher and dual-servo front gripper.
+3. Wire components per `schemes/wiring_diagram.png`.
+4. Flash MicroPython to the Pico.
+5. Copy `main.py` and `utils.py` into root.
+6. Test motion timing with small distances before full run.
+7. Calibrate servo angles in `utils.py` (⚠️ fill values under `# TODO: calibrate_angle()` section).
+8. Verify Bluetooth communication using serial monitor or RC Controller app.
+
+---
+
+## 🧾 Documentation & Media
+
+* [`docs/Engineering_Notebook.pdf`](docs/Engineering_Notebook.pdf) — Build log, team notes, design iterations.
+* [`docs/Game_Rules.pdf`](docs/Game_Rules.pdf) — Full official Smart City Builders Challenge manual.
+* [`schemes/wiring_diagram.png`](schemes/wiring_diagram.png) — Electrical wiring reference.
+* [`models/3d_printed_arms.stl`](models/3d_printed_arms.stl) — Front gripper 3D model.
+* [`photos/`](photos/) — Contains build process and final robot images.
+* [`video/demo.mp4`](video/demo.mp4) — Demo run footage.
+
+---
+
+## 🏆 Credits
+
+* Team **Orion** — University of Ghana, October 2025
+* **Members:**
+
+  * Ethan Nartey: Programmer — [ethan@example.com](mailto:ethan@example.com) || [enartey25](https://github.com/enartey25)
+  * Daniel K. D. Botchway: Designer — [daniel@example.com](mailto:daniel@example.com) || [08ops](https://github.com/08ops)
+  * Nelly Amewu: Builder — [neamewu@gmail.com](mailto:neamewu@gmail.com) || [oldVinyl](https://github.com/oldVinyl)
+* **Event Organizer:** Fireflyio Robotics — Ghana Robotics Competition 2025
