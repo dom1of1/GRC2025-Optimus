@@ -1,7 +1,7 @@
-# ORION V2 — Ghana Robotics Competition 2025 (Smart City Builders Challenge)
+# OPTIMUS V2 — Ghana Robotics Competition 2025 (Smart City Builders Challenge)
 
 **MicroPython-powered robot designed for the Ghana Robotics Competition (Engineers League, Smart City Builders Challenge).**
-Built using the **Xplore Bot kit** and a **Raspberry Pi Pico**, ORION V2 combines autonomous bridge repair, Bluetooth manual operation, and 3D-printed attachments to complete city-building and cleanup tasks.
+Built using the **Xplore Bot kit** and a **Raspberry Pi Pico**, OPTIMUS V2 combines autonomous bridge repair, Bluetooth manual operation, and 3D-printed attachments to complete city-building and cleanup tasks.
 
 ---
 
@@ -23,7 +23,7 @@ Built using the **Xplore Bot kit** and a **Raspberry Pi Pico**, ORION V2 combine
   * [Manual Mode](#2%EF%B8%8F-manual-mode)
 * [Mechanical Design](#-mechanical-design)
 * [Calibration](#-calibration)
-* [Rebuilding ORION V2](#-rebuilding-orion-v2)
+* [Rebuilding OPTIMUS V2](#-rebuilding-optimus-v2)
 * [Documentation & Media](#-documentation--media)
 * [Credits](#-credits)
 
@@ -72,7 +72,7 @@ Each match lasts **3 minutes**, beginning with a **1-minute autonomous mode** (w
 
 | Component             | Description                                      |
 | --------------------- | ------------------------------------------------ |
-| **Name**              | ORION V2                                         |
+| **Name**              | OPTIMUS V2                                         |
 | **Controller**        | Raspberry Pi Pico (MicroPython)                  |
 | **Drive System**      | 4-wheel tank drive (DC motors via L298N drivers) |
 | **Power Supply**      | 7.4V Li-ion battery pack                         |
@@ -218,7 +218,7 @@ Adjust the multiplier based on battery level and motor friction.
 
 ---
 
-## 🧰 Rebuilding ORION V2
+## 🧰 Rebuilding OPTIMUS V2
 
 To replicate the full robot:
 
@@ -240,16 +240,16 @@ To replicate the full robot:
 * [`schemes/wiring_diagram.png`](schemes/wiring_diagram.png) — Electrical wiring reference.
 * [`models/3d_printed_arms.stl`](models/3d_printed_arms.stl) — Front gripper 3D model.
 * [`photos/`](photos/) — Contains build process and final robot images.
-* [`video/demo.mp4`](video/demo.mp4) — Demo run footage.
+* [`video/demo.mp4`](videos\GRC_Optimus_demo.mp4) — Demo run footage.
 
 ---
 
 ## 🏆 Credits
 
-* Team **Orion** — University of Ghana, October 2025
+* Team **Optimus** — University of Ghana, October 2025
 * **Members:**
 
-  * Ethan Nartey: Programmer — [ethan@example.com](mailto:ethan@example.com) || [enartey25](https://github.com/enartey25)
-  * Daniel K. D. Botchway: Designer — [daniel@example.com](mailto:daniel@example.com) || [08ops](https://github.com/08ops)
-  * Nelly Amewu: Builder — [neamewu@gmail.com](mailto:neamewu@gmail.com) || [oldVinyl](https://github.com/oldVinyl)
+  * Dominic Fatonade: Programmer — [mrdominicfatonade@gmail.com](mailto:mrdominicfatonade@gmail.com) || [dom1of1](https://github.com/dom1of1)
+  * Bess-Marie Wuddah-Martey: Designer — [bessmarie@example.com](mailto:bessmarie@example.com) || [bess](https://github.com/--)
+  * Anastasia Andoh: Builder — [anas@example.com](anas@example.com) || [Anadhilah](https://github.com/Anadhilah)
 * **Event Organizer:** Fireflyio Robotics — Ghana Robotics Competition 2025
