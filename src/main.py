@@ -8,7 +8,7 @@ set_speed(50000)
 autonomous_mode = True
 autonomous_completed = False
 
-mode = Start()
+Start()
 print("Started")
 sleep(3)
 
@@ -19,26 +19,15 @@ while uart.any():
 #Main loop
 while True:
     if autonomous_mode and not autonomous_completed:
-        if mode == 'red':# Run autonomous behavior and check for manual override
-            print("pressed red || middle btn")
-            if red_autonomous_behavior():
-                # Manual overriode detected
-                autonomous_mode = False
-            else:
-                # Autonomous completed normally
-                autonomous_completed = True
-                autonomous_mode = False
-                stop()
-        elif mode == 'blue':
-            print("pressed blue || left btn")
-            if blue_autonomous_behavior():
-                # Manual override detected
-                autonomous_mode = False
-            else:
-                # Autonomous completed normally
-                autonomous_completed = True
-                autonomous_mode = False
-                stop()
+        # Run autonomous behavior and check for manual override
+        if blue_autonomous_behavior():
+            # Manual override detected
+            autonomous_mode = False
+        else:
+            # Autonomous completed normally
+            autonomous_completed = True
+            autonomous_mode = False
+            stop()
     else:
         # Manual mode
         if uart.any():
@@ -66,4 +55,4 @@ while True:
 
 
 
-  #which part determines if its blue or red autonomous mode
+

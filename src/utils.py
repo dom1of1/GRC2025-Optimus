@@ -31,9 +31,7 @@ servo_3 = None
 servo_1 = PWM(Pin(28))
 servo_1.freq(50)
 
-Start_Button_for_red = Pin(2,Pin.IN, Pin.PULL_UP)
-Start_Button_for_blue = Pin(6,Pin.IN, Pin.PULL_UP)
-
+Start_Button = Pin(2,Pin.IN, Pin.PULL_UP)
 
 uart = UART(0, 9600)
 
@@ -49,7 +47,7 @@ def custom_set_speed():
     ENC.duty_u16(40000)
     END.duty_u16(45000)
 
-def backward():
+def forward():
     disable_servos()
     m1_forward.on()
     m1_backward.off()
@@ -60,7 +58,7 @@ def backward():
     m4_forward.on()
     m4_backward.off()
 
-def forward():
+def backward():
     disable_servos()
     m1_forward.off()
     m1_backward.on()
@@ -71,7 +69,7 @@ def forward():
     m4_forward.off()
     m4_backward.on()
 
-def right():
+def left():
     disable_servos()
     m1_forward.off()
     m1_backward.on()
@@ -82,7 +80,7 @@ def right():
     m4_forward.on()
     m4_backward.off()
 
-def left():
+def right():
     disable_servos()
     m1_forward.on()
     m1_backward.off()
@@ -159,18 +157,21 @@ def calc_time(dist):
 
 #autonomous behavior for red start side
 def red_autonomous_behavior():
-    set_speed(50000)
-    
-    left()
-    if timed_sleep_with_override(0.3):
-        return True
-  
+    custom_set_speed()
     forward()
-    if timed_sleep_with_override(calc_time(88)):  
+    if timed_sleep_with_override(calc_time(67)):
+        return True
+    
+    right()
+    if timed_sleep_with_override(0.89):
+        return True
+
+    forward()
+    if timed_sleep_with_override(calc_time(76)):  
         return True
     
     left()
-    if timed_sleep_with_override(0.45):
+    if timed_sleep_with_override(1):
         return True
 
     # Reduce speed for final approach
@@ -187,23 +188,21 @@ def red_autonomous_behavior():
 
 #autonomous behavior for blue start side
 def blue_autonomous_behavior():
-    
-    set_speed(50000)
-    left()
-    if timed_sleep_with_override(0.35):
+    custom_set_speed()
+    forward()
+    if timed_sleep_with_override(calc_time(45)):
         return True
     
-    print("running blue")
-    
-    custom_set_speed()
+    right()
+    if timed_sleep_with_override(0.89):
+        return True
 
     forward()
-    if timed_sleep_with_override(calc_time(70)):  
+    if timed_sleep_with_override(calc_time(61)):  
         return True
     
-    set_speed(50000)
     left()
-    if timed_sleep_with_override(0.35):
+    if timed_sleep_with_override(1):
         return True
 
     # Reduce speed for final approach
@@ -212,7 +211,6 @@ def blue_autonomous_behavior():
     backward()
     if timed_sleep_with_override(3):
         return True
-    
     
     # Restore original speed after autonomous completes
     set_speed(65000)
@@ -227,8 +225,8 @@ def CalculateAngle(angle):
 def reinitialize_motor4():
     """Reinitialize motor 4 pins after servo use"""
     global m4_forward, m4_backward
-    m4_forward = Pin(19, Pin.OUT)
-    m4_backward = Pin(18, Pin.OUT)
+    m4_forward = Pin(18, Pin.OUT)
+    m4_backward = Pin(19, Pin.OUT)
     m4_forward.off()
     m4_backward.off()
 
@@ -242,7 +240,7 @@ def servo_up():
     try:
         servo2 = PWM(Pin(18))
         servo2.freq(50)
-        servo3 = PWM(Pin(8))
+        servo3 = PWM(Pin(19))
         servo3.freq(50)
         
         # Move servos
@@ -269,7 +267,7 @@ def servo_down():
     try:
         servo2 = PWM(Pin(18))
         servo2.freq(50)
-        servo3 = PWM(Pin(8))
+        servo3 = PWM(Pin(19))
         servo3.freq(50)
         
         # Move servos
@@ -303,7 +301,7 @@ def alternate_servos_with_override(cycles, delay_sec):
     try:
         servo2 = PWM(Pin(18))
         servo2.freq(50)
-        servo3 = PWM(Pin(8))
+        servo3 = PWM(Pin(19))
         servo3.freq(50)
         
         for i in range(cycles):
@@ -343,17 +341,11 @@ def servo_open():
 
 def servo_close():
     """Close the lifting mechanism using servo 1"""
-    servo_1.duty_u16(CalculateAngle(90))  # Close position
+    servo_1.duty_u16(CalculateAngle(180))  # Close position
     sleep(0.5)  # Give servo time to reach position
 
 # ok button configuration
 def Start():
     # Wait for button to be pressed (value == 1)
-    while Start_Button_for_red.value() == 0 and Start_Button_for_blue.value() == 0:
+    while Start_Button.value() == 0:
         sleep(0.01)
-    if Start_Button_for_red.value() == 1:
-        return 'red'
-    elif Start_Button_for_blue.value() == 1:
-        return 'blue'
-    else:
-        return None 
