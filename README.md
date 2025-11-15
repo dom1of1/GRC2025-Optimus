@@ -5,31 +5,31 @@ Built using the **Xplore Bot kit** and a **Raspberry Pi Pico**, OPTIMUS V2 combi
 
 ---
 
-## 📚 Table of Contents
+## Table of Contents
 
-* [Overview](#-overview)
+* [Overview](#overview)
 
   * [Challenge Context](#challenge-context)
-* [Repository Structure](#-repository-structure)
-* [Robot Summary](#-robot-summary)
-* [Hardware Overview](#%EF%B8%8F-hardware-overview)
-* [Software Architecture](#-software-architecture)
-* [Quick Start (Flash & Run)](#-quick-start-flash--run)
+* [Repository Structure](#repository-structure)
+* [Robot Summary](#robot-summary)
+* [Hardware Overview](#hardware-overview)
+* [Software Architecture](#software-architecture)
+* [Quick Start (Flash & Run)](#quick-start-flash--run)
 
   * [Bluetooth Commands](#bluetooth-commands)
-* [Behavior Summary](#-behavior-summary)
+* [Behavior Summary](#behavior-summary)
 
-  * [Autonomous Mode](#1%EF%B8%8F-autonomous-mode-mandatory-1-minute)
-  * [Manual Mode](#2%EF%B8%8F-manual-mode)
-* [Mechanical Design](#-mechanical-design)
-* [Calibration](#-calibration)
-* [Rebuilding OPTIMUS V2](#-rebuilding-optimus-v2)
-* [Documentation & Media](#-documentation--media)
-* [Credits](#-credits)
+  * [Autonomous Mode](#autonomous-mode-mandatory-1-minute)
+  * [Manual Mode](#manual-mode)
+* [Mechanical Design](#mechanical-design)
+* [Calibration](#calibration)
+* [Rebuilding OPTIMUS V2](#rebuilding-optimus-v2)
+* [Documentation & Media](#documentation--media)
+* [Credits](#credits)
 
 ---
 
-## 🧠 Overview
+## Overview
 
 ### Challenge Context
 
@@ -39,36 +39,45 @@ The **Smart City Builders Challenge** tasks participants to design robots addres
 2. **Building Essential Services** – constructing schools, hospitals, and workplaces using color-coded blocks.
 3. **Cleaning the City** – collecting rubbish balls and disposing them in bins.
 
-Each match lasts **3 minutes**, beginning with a **1-minute autonomous mode** (worth double points), followed by a **manual mode** (Bluetooth-controlled). Teams must score as many points as possible without external assistance.
+Each match lasts **3 minutes**, beginning with a **30-second autonomous mode** (worth double points), followed by a **manual mode** (Bluetooth-controlled). Teams must score as many points as possible without external assistance.
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
-├── README.md
-├── LICENSE
 ├── docs/
 │   ├── Engineering_Notebook.pdf
 │   └── Game_Rules.pdf
-├── src/
-│   ├── main.py
-│   ├── autonomous.py
-│   └── utils.py
-├── schemes/
-│   └── wiring_diagram.png
 ├── models/
 │   └── attachments/
-├── photos/
-│   ├── build/
-│   └── final/
-└── video/
-    └── demo.mp4
+│       ├── BAR.STL
+│       ├── clipper_left.STL
+│       ├── clipper_right.STL
+│       ├── GEAR 9.STL
+│       ├── holder.STL
+│       ├── Long rack.STL
+│       ├── Motor_Holder.STL
+│       ├── RACK.STL
+│       ├── ROUND.STL
+│       ├── slider_left.STL
+│       └── slider_right.STL
+├── schemes/
+│   └── wiring_diagram.png
+├── src/
+│   ├── main.py
+│   └── utils.py
+├── videos/
+│   └── GRC_Optimus_demo.mp4
+├── LICENSE
+├── README.md
+├── requirements.txt
+
 ```
 
 ---
 
-## 🦾 Robot Summary
+## Robot Summary
 
 | Component             | Description                                      |
 | --------------------- | ------------------------------------------------ |
@@ -83,7 +92,7 @@ Each match lasts **3 minutes**, beginning with a **1-minute autonomous mode** (w
 
 ---
 
-## ⚙️ Hardware Overview
+## Hardware Overview
 
 ### Core Components
 
@@ -97,11 +106,11 @@ Each match lasts **3 minutes**, beginning with a **1-minute autonomous mode** (w
 | 2x Start Buttons  | Side selection         | Red = GPIO 2, Blue = GPIO 6                    |
 | Power Source      | 7.4V battery           | Common ground with Pico                        |
 
-📄 *See* [`schemes/wiring_diagram.png`](schemes/wiring_diagram.png) *for detailed pin mapping.*
+*See* [`schemes/wiring_diagram.png`](schemes/wiring_diagram.png) *for detailed pin mapping.*
 
 ---
 
-## 🧩 Software Architecture
+## Software Architecture
 
 ```bash
 src/
@@ -114,7 +123,7 @@ src/
 
 ---
 
-## 🔧 Quick Start (Flash & Run)
+## Quick Start (Flash & Run)
 
 1. **Flash MicroPython** to the Raspberry Pi Pico (via Thonny or `esptool`).
 2. **Copy Files**: Upload `src/main.py` and `src/utils.py` to the Pico’s root directory.
@@ -141,9 +150,9 @@ src/
 
 ---
 
-## 🤖 Behavior Summary
+## Behavior Summary
 
-### 1️⃣ Autonomous Mode (Mandatory, 1 minute)
+### Autonomous Mode (Mandatory, 30 seconds)
 
 * Starts upon pressing Red/Blue button.
 * Executes bridge repair task based on field side.
@@ -155,7 +164,7 @@ src/
 | Side     | Behavior Summary                                                                   |
 | -------- | ---------------------------------------------------------------------------------- |
 | **Red**  | Moves forward ≈ 88 cm, turns toward bridge, aligns, and pushes pallets into place. |
-| **Blue** | Mirror version with ≈ 70 cm forward motion.                                        |
+| **Blue** | Mirror version of Red with ≈ 70 cm forward motion.                                        |
 
 #### Scoring Reference (from Game Manual)
 
@@ -167,7 +176,7 @@ src/
 
 ---
 
-### 2️⃣ Manual Mode
+### Manual Mode
 
 * Activates automatically after autonomous mode or via Bluetooth input.
 * Allows fine control for:
@@ -191,7 +200,7 @@ src/
 
 ---
 
-## 🪛 Mechanical Design
+## Mechanical Design
 
 | Module                | Description                                                   |
 | --------------------- | ------------------------------------------------------------- |
@@ -200,11 +209,10 @@ src/
 | **Gripper Functions** | Lift (servo 1), Open/Close (servos 2 & 3).                    |
 | **Rear Attachment**   | Fixed pusher plate for bridge repair.                         |
 
-📂 3D models available in [`models/`](models/) — includes `3d_printed_arms.stl` and bridge pusher design.
-
+3D models for attachments available in [`models/attachments`](models/attachments)
 ---
 
-## 📏 Calibration
+## Calibration
 
 Motion timing is based on travel distance (40.5 cm/s baseline). The following formula is used for consistent movement:
 
@@ -218,7 +226,7 @@ Adjust the multiplier based on battery level and motor friction.
 
 ---
 
-## 🧰 Rebuilding OPTIMUS V2
+## Rebuilding OPTIMUS V2
 
 To replicate the full robot:
 
@@ -228,28 +236,27 @@ To replicate the full robot:
 4. Flash MicroPython to the Pico.
 5. Copy `main.py` and `utils.py` into root.
 6. Test motion timing with small distances before full run.
-7. Calibrate servo angles in `utils.py` (⚠️ fill values under `# TODO: calibrate_angle()` section).
+7. Calibrate servo angles in `utils.py`.
 8. Verify Bluetooth communication using serial monitor or RC Controller app.
 
 ---
 
-## 🧾 Documentation & Media
+## Documentation & Media
 
 * [`docs/Engineering_Notebook.pdf`](docs/Engineering_Notebook.pdf) — Build log, team notes, design iterations.
 * [`docs/Game_Rules.pdf`](docs/Game_Rules.pdf) — Full official Smart City Builders Challenge manual.
 * [`schemes/wiring_diagram.png`](schemes/wiring_diagram.png) — Electrical wiring reference.
-* [`models/3d_printed_arms.stl`](models/3d_printed_arms.stl) — Front gripper 3D model.
-* [`photos/`](photos/) — Contains build process and final robot images.
-* [`video/demo.mp4`](videos\GRC_Optimus_demo.mp4) — Demo run footage.
+* [`models/attachments`](models/attachments) — 3D models for attachments.
+* [`videos/GRC_Optimus_demo.mp4`](videos/GRC_Optimus_demo.mp4) — Demo run footage.
 
 ---
 
-## 🏆 Credits
+## Credits
 
 * Team **Optimus** — University of Ghana, October 2025
 * **Members:**
 
   * Dominic Fatonade: Programmer — [mrdominicfatonade@gmail.com](mailto:mrdominicfatonade@gmail.com) || [dom1of1](https://github.com/dom1of1)
-  * Bess-Marie Wuddah-Martey: Designer — [bessmarie@example.com](mailto:bessmarie@example.com) || [bess](https://github.com/--)
-  * Anastasia Andoh: Builder — [anas@example.com](anas@example.com) || [Anadhilah](https://github.com/Anadhilah)
+  * Bess-Marie Wuddah-Martey: 3D Model Designer — [bessmariewuddahmartey@gmail.com](mailto:bessmariewuddahmartey@gmail.com) || [bess](https://github.com/--)
+  * Anastasia Andoh: Bot Builder — [andohanastasia3@gmail.com](mailto:andohanastasia3@gmail.com) || [Anadhilah](https://github.com/Anadhilah)
 * **Event Organizer:** Fireflyio Robotics — Ghana Robotics Competition 2025
