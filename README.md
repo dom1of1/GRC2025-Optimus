@@ -19,7 +19,7 @@ Built using the **Xplore Bot kit** and a **Raspberry Pi Pico**, OPTIMUS V2 combi
   * [Bluetooth Commands](#bluetooth-commands)
 * [Behavior Summary](#behavior-summary)
 
-  * [Autonomous Mode](#autonomous-mode-mandatory-1-minute)
+  * [Autonomous Mode](#autonomous-mode-mandatory-30-seconds)
   * [Manual Mode](#manual-mode)
 * [Mechanical Design](#mechanical-design)
 * [Calibration](#calibration)
