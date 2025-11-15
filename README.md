@@ -257,6 +257,6 @@ To replicate the full robot:
 * **Members:**
 
   * Dominic Fatonade: Programmer — [mrdominicfatonade@gmail.com](mailto:mrdominicfatonade@gmail.com) || [dom1of1](https://github.com/dom1of1)
-  * Bess-Marie Wuddah-Martey: 3D Model Designer — [bessmariewuddahmartey@gmail.com](mailto:bessmariewuddahmartey@gmail.com) || [bess](https://github.com/--)
-  * Anastasia Andoh: Bot Builder — [andohanastasia3@gmail.com](mailto:andohanastasia3@gmail.com) || [Anadhilah](https://github.com/Anadhilah)
+  * Bess-Marie Wuddah-Martey: Designer — [bessmariewuddahmartey@gmail.com](mailto:bessmariewuddahmartey@gmail.com) || [bess](https://github.com/--)
+  * Anastasia Andoh: Builder — [andohanastasia3@gmail.com](mailto:andohanastasia3@gmail.com) || [Anadhilah](https://github.com/Anadhilah)
 * **Event Organizer:** Fireflyio Robotics — Ghana Robotics Competition 2025
